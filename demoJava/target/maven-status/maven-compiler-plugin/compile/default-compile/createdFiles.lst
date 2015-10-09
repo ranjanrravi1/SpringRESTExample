@@ -1,0 +1,9 @@
+com\dao\PolicyDAOImpl.class
+com\dto\Policy.class
+com\bean\PolicyBean.class
+com\dao\PolicyDAO.class
+com\service\PolicyService.class
+com\dto\Person.class
+com\MainApp.class
+com\bean\PolicyBeanImpl.class
+com\service\PolicyServiceImpl.class

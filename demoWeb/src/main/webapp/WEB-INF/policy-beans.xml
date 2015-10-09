@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<!-- MYSQL DB DataSource -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/testdb" />
+		<property name="username" value="root" />
+		<property name="password" value="password" />
+	</bean>
+ 	
+ 	<bean id="personDAO" class="com.dao.PersonDAOImpl">
+		<constructor-arg>
+        	<ref bean="sessionFactory" />
+  		</constructor-arg>
+	</bean>
+ 	
+ 	<bean id="policyDAO" class="com.dao.PolicyDAOImpl">
+		<constructor-arg>
+        	<ref bean="sessionFactory" />
+  		</constructor-arg>
+	</bean>
+ 	
+	<bean id="policyService" class="com.service.PolicyServiceImpl">
+		<property name="policyDAO" ref="policyDAO" />
+		<property name="personDAO" ref="personDAO" />
+	</bean>
+
+	<bean id="policyBean" class="com.bean.PolicyBeanImpl">
+		<property name="policyService" ref="policyService" />
+	</bean>
+
+	<tx:annotation-driven />
+	
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+</beans>
