@@ -5,8 +5,8 @@ package com.bean;
 
 import java.util.List;
 
-import com.dto.Person;
-import com.dto.Policy;
+import com.vo.PersonVO;
+import com.vo.PolicyVO;
 
 /**
  * @author 492086
@@ -14,15 +14,15 @@ import com.dto.Policy;
  */
 public interface PolicyBean {
 
-	public int CreatePolicy(Policy policyDto);
-	public List<Policy> getPolicy();
-	public Policy getPolicy(int policyId);
-	public boolean updatePolicy(Policy policyDto);
+	public int CreatePolicy(PolicyVO policyDto);
+	public List<PolicyVO> getPolicy();
+	public PolicyVO getPolicy(int policyId);
+	public boolean updatePolicy(PolicyVO policyDto);
 	public boolean deletePolicy(int policyId);
 	
-	public List<Person> getPolicyHolders(int policyId);
-	public Person getPolicyHolder(int policyId, int phId);
-	public int addPolicyHolder(Person person);
-	public boolean updatePolicyHolder(Person personObj);
+	public List<PersonVO> getPolicyHolders(int policyId);
+	public PersonVO getPolicyHolder(int policyId, int phId);
+	public int addPolicyHolder(PersonVO person);
+	public boolean updatePolicyHolder(PersonVO personObj);
 	public boolean deletePolicyHolder(int id, int phId);
 }

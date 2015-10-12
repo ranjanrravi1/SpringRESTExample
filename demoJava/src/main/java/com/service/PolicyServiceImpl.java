@@ -14,6 +14,9 @@ import com.dao.PersonDAO;
 import com.dao.PolicyDAO;
 import com.dto.Person;
 import com.dto.Policy;
+import com.utility.PolicyUtils;
+import com.vo.PersonVO;
+import com.vo.PolicyVO;
 
 /**
  * @author 492086
@@ -43,24 +46,39 @@ public class PolicyServiceImpl implements PolicyService{
 	}
 
 	@Transactional
-	public int createPolicy(Policy policyDTO) {
+	public int createPolicy(PolicyVO policyVO) {
 
+		Policy policyDTO = PolicyUtils.extractPolicy(policyVO);
+		
 		return policyDAO.create(policyDTO);
 	}
 
 	@Transactional
 	public List getPolicy() {
-		return policyDAO.read();
+		List<Policy> policies = policyDAO.read();
+		
+		List<PolicyVO> policyVOs = PolicyUtils.extractAllPolicyVOs(policies);
+		
+		return policyVOs;
 	}
 	
 	@Transactional
-	public Policy getPolicy(int policyId) {
+	public PolicyVO getPolicy(int policyId) {
 		
-		return policyDAO.read(policyId);
+		Policy policyDTO = policyDAO.read(policyId);
+
+		if(policyDTO == null){
+			return null;
+		}
+		else{
+			return PolicyUtils.extractPolicyVO(policyDTO);
+		}
 	}
 
 	@Transactional
-	public boolean updatePolicy(Policy policyDTO) {
+	public boolean updatePolicy(PolicyVO policyVO) {
+		
+		Policy policyDTO = PolicyUtils.extractPolicy(policyVO);
 		
 		return policyDAO.update(policyDTO);
 	}
@@ -72,31 +90,39 @@ public class PolicyServiceImpl implements PolicyService{
 	}
 
 	@Transactional
-	public List<Person> getPolicyHolders(int policyId) {
+	public List<PersonVO> getPolicyHolders(int policyId) {
 		Policy policy = new Policy();
 		policy.setId(policyId);
 		List<Person> persons = personDAO.read(policy);
-		return persons;
+		List<PersonVO> personVOs = PolicyUtils.extractAllPersonVOs(persons);
+		return personVOs;
 	}
 
 	@Transactional
-	public Person getPolicyHolder(int policyId, int phId) {		
+	public PersonVO getPolicyHolder(int policyId, int phId) {		
 		Policy policy = new Policy();
 		policy.setId(policyId);
 		Person person = personDAO.read(policy,phId);
 		
-		return person;
+		PersonVO personVO = PolicyUtils.extractPersonVO(person);
+		
+		return personVO;
 	}
 
 	@Transactional
-	public int addPolicyHolder(Person person) {
+	public int addPolicyHolder(PersonVO personVO) {
+		
+		Person person = PolicyUtils.extractPerson(personVO);
 		
 		return personDAO.create(person);
 	}
 
 	@Transactional
-	public boolean updatePolicyHolder(Person personObj) {
-		return personDAO.update(personObj);
+	public boolean updatePolicyHolder(PersonVO personVO) {
+		
+		Person person = PolicyUtils.extractPerson(personVO);
+		
+		return personDAO.update(person);
 	}	
 
 	@Transactional

@@ -5,8 +5,8 @@ package com.service;
 
 import java.util.List;
 
-import com.dto.Person;
-import com.dto.Policy;
+import com.vo.PersonVO;
+import com.vo.PolicyVO;
 
 /**
  * @author 492086
@@ -14,15 +14,15 @@ import com.dto.Policy;
  */
 public interface PolicyService {
 
-	public int createPolicy(Policy policyDTO);
-	public List<Policy> getPolicy();
-	public Policy getPolicy(int policyId);
-	public boolean updatePolicy(Policy policyDTO);
+	public int createPolicy(PolicyVO policyVO);
+	public List getPolicy();
+	public PolicyVO getPolicy(int policyId);
+	public boolean updatePolicy(PolicyVO policyVO);
 	public boolean deletePolicy(int policyId);
 	
-	public List<Person> getPolicyHolders(int policyId);
-	public Person getPolicyHolder(int policyId, int phId);
-	public int addPolicyHolder(Person person);
-	public boolean updatePolicyHolder(Person personObj);
+	public List getPolicyHolders(int policyId);
+	public PersonVO getPolicyHolder(int policyId, int phId);
+	public int addPolicyHolder(PersonVO personVO);
+	public boolean updatePolicyHolder(PersonVO personVO);
 	public boolean deletePolicyHolder(int policyId, int phId);
 }

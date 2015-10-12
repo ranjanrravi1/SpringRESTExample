@@ -3,7 +3,6 @@
  */
 package com.project.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -21,9 +20,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.bean.PolicyBean;
-import com.dto.Person;
-import com.dto.Policy;
-import com.project.vo.PersonVO;
+import com.vo.PersonVO;
 
 /**
  * @author 492086
@@ -48,48 +45,30 @@ public class PersonController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<PersonVO>> getPolicyHolders(@PathVariable int id) {
 		log.info("getPolicyHolders " + id);
-		List<PersonVO> personVOs = new ArrayList<PersonVO>();
-		List<Person> persons = policyBean.getPolicyHolders(id);
-		log.info("persons size " + persons.size());
-		if (persons != null) {
-			for (Person p : persons) {
-				PersonVO personVO = new PersonVO();
-				personVO.setId(p.getId());
-				personVO.setName(p.getName());
-				personVO.setAddress(p.getAddress());
-				personVO.setAge(p.getAge());
-				personVO.setPolicyId(p.getPolicy().getId());
-				personVOs.add(personVO);
-			}
+		List<PersonVO> personVOs = policyBean.getPolicyHolders(id); 
+		if(personVOs !=null){
+			log.info("persons size " + personVOs.size());
+			return new ResponseEntity<List<PersonVO>>(personVOs, HttpStatus.OK);
 		}
 		return new ResponseEntity<List<PersonVO>>(personVOs, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value ="/{phId}", method = RequestMethod.GET)
 	public ResponseEntity<PersonVO> getPolicyHolder(@PathVariable int id, @PathVariable int phId){
-		PersonVO personVO = null;
-		Person p = policyBean.getPolicyHolder(id, phId);
-		if(p == null ){
+		
+		PersonVO personVO = policyBean.getPolicyHolder(id, phId);
+				
+		if(personVO == null){
 			return new ResponseEntity<PersonVO>(personVO, HttpStatus.NOT_FOUND);
-		}
-		else{
-			personVO = new PersonVO();
-			personVO.setId(p.getId());
-			personVO.setName(p.getName());
-			personVO.setAddress(p.getAddress());
-			personVO.setAge(p.getAge());
-			personVO.setPolicyId(p.getPolicy().getId());
-			
+		}else{
 			return new ResponseEntity<PersonVO>(personVO, HttpStatus.OK);
 		}
-		
-		
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public ResponseEntity<String> addPolicyHolder(UriComponentsBuilder b, @PathVariable int id, @RequestBody PersonVO personVO){
 		HttpHeaders headers = new HttpHeaders();
-		 
+		/* 
 		Person personObj = new Person();
 		log.info("person "+personVO);
 		if(personVO !=null){
@@ -99,8 +78,9 @@ public class PersonController {
 			personObj.setPolicy(policy);
 			personObj.setAddress(personVO.getAddress());
 			personObj.setAge(personVO.getAge());			
-		}
-		int phId = policyBean.addPolicyHolder(personObj);
+		}*/
+		personVO.setPolicyId(id);
+		int phId = policyBean.addPolicyHolder(personVO);
 		
 		UriComponents uriComponents = b.path("/policy/{id}/ph/").buildAndExpand(phId);
 		headers.setLocation(uriComponents.toUri());
@@ -111,7 +91,7 @@ public class PersonController {
 	@RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
 	public ResponseEntity<String> updatePolicyHolder(@PathVariable int id,
 			@RequestBody PersonVO personVO) {
-		Person personObj = new Person();
+		/*Person personObj = new Person();
 		log.info("updatePolicyHolder--> person " + personVO);
 		if (personVO != null) {
 			personObj.setId(personVO.getId());
@@ -121,8 +101,9 @@ public class PersonController {
 			personObj.setPolicy(policy);
 			personObj.setAddress(personVO.getAddress());
 			personObj.setAge(personVO.getAge());
-		}
-		boolean status = policyBean.updatePolicyHolder(personObj);
+		}*/
+		personVO.setPolicyId(id);
+		boolean status = policyBean.updatePolicyHolder(personVO);
 		
 		if(status){
 			return new ResponseEntity<String>(HttpStatus.OK);

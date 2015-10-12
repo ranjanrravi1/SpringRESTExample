@@ -9,9 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dto.Person;
-import com.dto.Policy;
 import com.service.PolicyService;
+import com.vo.PersonVO;
+import com.vo.PolicyVO;
 
 /**
  * @author 492086
@@ -32,29 +32,29 @@ public class PolicyBeanImpl implements PolicyBean {
 	}
 
 	
-	public List<Policy> getPolicy() {
+	public List<PolicyVO> getPolicy() {
 		log.info("inside PolicyBeanImpl -> getPolicy ");
 		
-		List<Policy> policies = policyService.getPolicy();
+		List<PolicyVO> policies = policyService.getPolicy();
 		return policies;
 	}
 
-	public Policy getPolicy(int policyId) {
+	public PolicyVO getPolicy(int policyId) {
 		log.info("inside PolicyBeanImpl -> getPolicy - with policyid : "+policyId);
 		
-		Policy policyDTO = policyService.getPolicy(policyId);
-		return policyDTO;
+		PolicyVO policyVO = policyService.getPolicy(policyId);
+		return policyVO;
 	}
 	
-	public int CreatePolicy(Policy policyDTO) {
+	public int CreatePolicy(PolicyVO policyVO) {
 		log.info("inside CreatePolicy method ");
 		
-		return policyService.createPolicy(policyDTO);
+		return policyService.createPolicy(policyVO);
 	}
 
-	public boolean updatePolicy(Policy policyDTO) {
+	public boolean updatePolicy(PolicyVO policyVO) {
 		log.info("inside updatePolicy method ");
-		return policyService.updatePolicy(policyDTO);
+		return policyService.updatePolicy(policyVO);
 	}
 
 	public boolean deletePolicy(int policyId) {
@@ -62,30 +62,30 @@ public class PolicyBeanImpl implements PolicyBean {
 		return policyService.deletePolicy(policyId);
 	}
 
-	public List<Person> getPolicyHolders(int policyId) {
+	public List<PersonVO> getPolicyHolders(int policyId) {
 		log.info("inside PolicyBeanImpl -> getPolicyHolders - with policyid : "+policyId);
 		
-		List<Person> persons = policyService.getPolicyHolders(policyId);
+		List<PersonVO> persons = policyService.getPolicyHolders(policyId);
 		return persons;
 	}
 
-	public Person getPolicyHolder(int policyId, int phId) {
+	public PersonVO getPolicyHolder(int policyId, int phId) {
 		log.info("inside PolicyBeanImpl -> getPolicyHolder - with policyid : "+policyId);
 		
-		Person person = policyService.getPolicyHolder(policyId, phId);
+		PersonVO person = policyService.getPolicyHolder(policyId, phId);
 		return person;
 	}
 
-	public int addPolicyHolder(Person person) {
+	public int addPolicyHolder(PersonVO personVO) {
 		log.info("inside PolicyBeanImpl -> addPolicyHolder ");
 		
-		int phId = policyService.addPolicyHolder(person);
+		int phId = policyService.addPolicyHolder(personVO);
 		return phId;
 	}
 
 
-	public boolean updatePolicyHolder(Person personObj) {
-		return policyService.updatePolicyHolder(personObj);
+	public boolean updatePolicyHolder(PersonVO personVO) {
+		return policyService.updatePolicyHolder(personVO);
 	}
 	
 	public boolean deletePolicyHolder(int policyId, int phId) {

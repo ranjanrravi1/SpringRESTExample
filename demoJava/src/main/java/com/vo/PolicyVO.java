@@ -1,17 +1,10 @@
-/**
- * 
- */
-package com.project.vo;
+package com.vo;
 
 import java.util.List;
 
 
-/**
- * @author 492086
- *
- */
 public class PolicyVO {
-
+	
 	private int id;
 	private String name;
 	private int term;
@@ -70,16 +63,20 @@ public class PolicyVO {
 	public void setPremium(float premium) {
 		this.premium = premium;
 	}
+
 	/**
 	 * @return the personVOs
 	 */
 	public List<PersonVO> getPersonVOs() {
 		return personVOs;
 	}
+
 	/**
 	 * @param personVOs the personVOs to set
 	 */
 	public void setPersonVOs(List<PersonVO> personVOs) {
 		this.personVOs = personVOs;
 	}
+	
+	
 }

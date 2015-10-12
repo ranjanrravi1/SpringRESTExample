@@ -35,6 +35,8 @@ public class PersonDAOImpl implements PersonDAO{
 				.add(Restrictions.eq("p.id", policy.getId()))
 				.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
 
+		System.out.println("persons "+persons);
+		
 		return persons;
 	}
 

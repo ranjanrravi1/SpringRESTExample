@@ -1,9 +1,7 @@
 package com.project.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +17,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.bean.PolicyBean;
-import com.dto.Person;
-import com.dto.Policy;
-import com.project.utility.PolicyUtils;
-import com.project.vo.PersonVO;
-import com.project.vo.PolicyVO;
+import com.vo.PolicyVO;
 
 @Controller
 @RequestMapping("/policy")
@@ -44,56 +38,28 @@ public class PolicyController {
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<List<PolicyVO>> getAllPolicies() {
 
-		List<Policy> policies = policyBean.getPolicy();
+		List<PolicyVO> policies = policyBean.getPolicy();
 
-		List<PolicyVO> policyVOs  = PolicyUtils.extractAllPolicies(policies);
-		
-		return new ResponseEntity<List<PolicyVO>>(policyVOs, HttpStatus.OK);
+		return new ResponseEntity<List<PolicyVO>>(policies, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<PolicyVO> getOnlyPolicy(@PathVariable int id) {
 
-		Policy policyDTO = policyBean.getPolicy(id);
-
-		if(policyDTO == null){
-			return null;
+		PolicyVO policy = policyBean.getPolicy(id);
+		if(policy == null){
+			return new ResponseEntity<PolicyVO>(policy, HttpStatus.NOT_FOUND);
 		}
-		PolicyVO vo = PolicyUtils.extractPolicyInfo(policyDTO);
-		
-		return new ResponseEntity<PolicyVO>(vo, HttpStatus.OK);
+		return new ResponseEntity<PolicyVO>(policy, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-	public ResponseEntity<String> addPolicy(UriComponentsBuilder b, @RequestBody PolicyVO policyDto){
-		log.info("Str "+policyDto);
-		ObjectMapper mapper = new ObjectMapper();
-		PolicyVO policyVO = null;
+	public ResponseEntity<String> addPolicy(UriComponentsBuilder b, @RequestBody PolicyVO policyVO){
+		log.info("Str "+policyVO);
 		
 		int returnInt = 0 ;
 		
-		Policy  vo = new Policy();
-		vo.setName(policyDto.getName());
-		vo.setTerm(policyDto.getTerm());
-		vo.setPremium(policyDto.getPremium());
-		
-		List<PersonVO> personVOs =  policyDto.getPersonVOs();
-		List<Person> persons = new ArrayList<Person>();
-		log.info("personVOs "+personVOs);
-		
-		if(personVOs != null){
-			for (PersonVO p : personVOs) {
-				Person person = new Person();
-				person.setName(p.getName());
-				person.setAddress(p.getAddress());
-				person.setAge(p.getAge());
-				person.setPolicy(vo);
-				persons.add(person);
-			}
-			vo.setPersonList(persons);
-		}
-		
-		returnInt =	policyBean.CreatePolicy(vo);
+		returnInt =	policyBean.CreatePolicy(policyVO);
 		HttpHeaders headers = new HttpHeaders();
 		UriComponents uriComponents = b.path("/policy/{id}/ph/").buildAndExpand(returnInt);
 		headers.setLocation(uriComponents.toUri());
@@ -103,32 +69,9 @@ public class PolicyController {
 	
 	@RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
 	public ResponseEntity<String> updatePolicy(@RequestBody PolicyVO policyVO){
-		ObjectMapper mapper = new ObjectMapper();
 		
-		Policy  vo = new Policy();
-		vo.setId(policyVO.getId());
-		vo.setName(policyVO.getName());
-		vo.setTerm(policyVO.getTerm());
-		vo.setPremium(policyVO.getPremium());
 		
-		List<PersonVO> personVOs =  policyVO.getPersonVOs();
-		List<Person> persons = new ArrayList<Person>();
-		log.info("personVOs "+personVOs);
-		
-		if(personVOs != null){
-			for (PersonVO p : personVOs) {
-				Person person = new Person();
-				person.setId(p.getId());
-				person.setName(p.getName());
-				person.setAddress(p.getAddress());
-				person.setAge(p.getAge());
-				person.setPolicy(vo);
-				persons.add(person);
-			}
-			vo.setPersonList(persons);
-		}
-		
-		boolean returnStatus =	policyBean.updatePolicy(vo);		
+		boolean returnStatus =	policyBean.updatePolicy(policyVO);		
 		if(returnStatus){
 			return new ResponseEntity<String>(HttpStatus.OK);
 		}

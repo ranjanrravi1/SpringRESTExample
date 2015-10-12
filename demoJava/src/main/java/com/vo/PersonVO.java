@@ -1,8 +1,14 @@
-package com.project.vo;
+/**
+ * 
+ */
+package com.vo;
 
-
+/**
+ * @author 492086
+ *
+ */
 public class PersonVO {
-	
+
 	private int id;
 	private String name;
 	private String address;
