@@ -3,7 +3,7 @@ Spring REST webservice
 
 Simple Spring Rest Example to demonstrate a simple policy service example which allows CRUD operation of policy via Rest EndPoints. This example can consume/produce JSON.
 
-Spring - Hibernate integration is done as well.
+In this sample Spring-Hibernate integration is done as well.
 
 # DataBase
 
